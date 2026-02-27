@@ -47,7 +47,7 @@ variable "standard_patterns" {
       "Standard Email Address Scanner",
       "US Passport Scanner",
       "US Social Security Number Scanner",
-      "US Tax Identification Number Scanner",
+      "US Individual Taxpayer Identification Number Scanner (ITIN)",
       "US Vehicle Identification Number Scanner",
       "ABA Routing Transit Number Scanner",
       "Standard IBAN Code Scanner",
