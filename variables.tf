@@ -1,7 +1,7 @@
-variable "group_name" {
+variable "filter_query" {
   type        = string
-  description = "The name of the Sensitive Data Scanner group."
-  default     = "Default Scanning Group"
+  description = "The filter query to determine which logs/spans/events are scanned."
+  default     = "*"
 }
 
 variable "group_description" {
@@ -10,10 +10,16 @@ variable "group_description" {
   default     = "Managed by OpenTofu"
 }
 
-variable "filter_query" {
+variable "group_name" {
   type        = string
-  description = "The filter query to determine which logs/spans/events are scanned."
-  default     = "*"
+  description = "The name of the Sensitive Data Scanner group."
+  default     = "Default Scanning Group"
+}
+
+variable "is_enabled" {
+  type        = bool
+  description = "Whether the scanning group is enabled."
+  default     = true
 }
 
 variable "product_list" {
@@ -28,10 +34,10 @@ variable "product_samplings" {
   default     = {}
 }
 
-variable "is_enabled" {
-  type        = bool
-  description = "Whether the scanning group is enabled."
-  default     = true
+variable "redaction_replacement_string" {
+  type        = string
+  description = "The string to use for redaction if type is replacement_string."
+  default     = "[REDACTED]"
 }
 
 variable "standard_patterns" {
@@ -73,10 +79,4 @@ variable "standard_patterns" {
       "Twilio API Secret Scanner",
       "Twilio Auth Token Scanner"
   ]
-}
-
-variable "redaction_replacement_string" {
-  type        = string
-  description = "The string to use for redaction if type is replacement_string."
-  default     = "[REDACTED]"
 }

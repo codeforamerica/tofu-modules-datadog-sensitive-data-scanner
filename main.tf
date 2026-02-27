@@ -1,11 +1,12 @@
 resource "datadog_sensitive_data_scanner_group" "this" {
   name        = var.group_name
   description = var.group_description
+  is_enabled   = var.is_enabled
+  product_list = var.product_list
+
   filter {
     query = var.filter_query
   }
-  is_enabled   = var.is_enabled
-  product_list = var.product_list
 
   dynamic "samplings" {
     for_each = var.product_list
@@ -22,11 +23,6 @@ data "datadog_sensitive_data_scanner_standard_pattern" "patterns" {
 }
 
 resource "datadog_sensitive_data_scanner_rule" "rules" {
-  lifecycle {
-    # Use this meta-argument to avoid disabling the group when modifying the
-    # `included_keyword_configuration` field
-    create_before_destroy = true
-  }
   for_each = data.datadog_sensitive_data_scanner_standard_pattern.patterns
 
   name                = each.key
@@ -38,5 +34,11 @@ resource "datadog_sensitive_data_scanner_rule" "rules" {
   text_replacement {
     type               = "replacement_string"
     replacement_string = var.redaction_replacement_string
+  }
+
+  lifecycle {
+    # Use this meta-argument to avoid disabling the group when modifying the
+    # `included_keyword_configuration` field
+    create_before_destroy = true
   }
 }
