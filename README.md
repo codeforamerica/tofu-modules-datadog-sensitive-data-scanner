@@ -1,33 +1,21 @@
-# Code for America OpenTofu Module Template
+# Datadog Sensitive Data Scanner Module
 
 [![GitHub Release][badge-release]][latest-release]
 
-Use this template repository to create new OpenTofu modules. Follow the steps
-below to use this repository:
-
-1. Click the "Use this template" button to create a new repository
-1. Name your new repository using the format `todu-modules-<provider>-<module>`
-1. Add the files necessary to support your module to the root of your new
-   repository
-1. Update the `README.md` file with the appropriate information for your module.
-   Make sure you update any references to this template repository with your new
-   repository
-1. Update the [codeforamerica/tofu-modules][tofu-modules] repository to include
-   your new module in the main `README.md` and the documentation
+This module creates a configurable Sensitive Data Scanner group in Datadog for monitoring log data.
 
 ## Usage
 
 Add this module to your `main.tf` (or appropriate) file and configure the inputs
 to match your desired configuration. For example:
 
-[//]: # (TODO: Update to match your module's name and inputs)
-
 ```hcl
-module "module_name" {
-  source = "github.com/codeforamerica/tofu-modules-template?ref=1.0.0"
+module "sensitive_data_scanner" {
+  source = "github.com/codeforamerica/tofu-modules-datadog-sensitive-data-scanner?ref=v1.0.0"
 
-  project = "my-project"
-  environment = "development"
+  group_name   = "Production Logs Scanning"
+  filter_query = "env:production"
+  product_list = ["logs", "apm"]
 }
 ```
 
@@ -46,29 +34,30 @@ tofu init -upgrade
 
 ## Inputs
 
-[//]: # (TODO: Replace the following with your own inputs)
-
-| Name        | Description                                   | Type     | Default | Required |
-|-------------|-----------------------------------------------|----------|---------|----------|
-| project     | Name of the project.                          | `string` | n/a     | yes      |
-| environment | Environment for the project.                  | `string` | `"dev"` | no       |
-| tags        | Optional tags to be applied to all resources. | `list`   | `[]`    | no       |
+| Name                           | Description                                                                    | Type           | Default                    | Required |
+|--------------------------------|--------------------------------------------------------------------------------|----------------|----------------------------|----------|
+| `group_name`                   | The name of the Sensitive Data Scanner group.                                  | `string`       | `"Default Scanning Group"` | no       |
+| `group_description`            | The description of the Sensitive Data Scanner group.                           | `string`       | `"Managed by OpenTofu"`    | no       |
+| `filter_query`                 | The filter query to determine which logs/spans/events are scanned.             | `string`       | `"*"`                      | no       |
+| `product_list`                 | List of products to scan (e.g., logs, apm, rum).                               | `list(string)` | `["logs", "apm"]`          | no       |
+| `product_samplings`            | Map of product to sampling rate (0 to 100).                                    | `map(number)`  | `{}`                       | no       |
+| `is_enabled`                   | Whether the scanning group is enabled.                                         | `bool`         | `true`                     | no       |
+| `standard_patterns`            | List of standard Scanning Rules Library rules to enable.                       | `list(string)` | `[...]`                    | no       |
+| `redaction_replacement_string` | The string to use for redaction if type is replacement_string.                 | `string`       | `"[REDACTED]"`             | no       |
 
 ## Outputs
 
-[//]: # (TODO: Replace the following with your own outputs)
-
-| Name     | Description                       | Type     |
-|----------|-----------------------------------|----------|
-| id       | Id of the newly created resource. | `string` |
-
+| Name       | Description                                    | Type          |
+|------------|------------------------------------------------|---------------|
+| `group_id` | The ID of the Sensitive Data Scanner group.    | `string`      |
+| `rule_ids` | A map of standard pattern names to rule IDs.   | `map(string)` |
 
 ## Contributing
 
 Follow the [contributing guidelines][contributing] to contribute to this
 repository.
 
-[badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-template?logo=github&label=Latest%20Release
+[badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-datadog-sensitive-data-scanner?logo=github&label=Latest%20Release
 [contributing]: CONTRIBUTING.md
-[latest-release]: https://github.com/codeforamerica/tofu-modules-template/releases/latest
+[latest-release]: https://github.com/codeforamerica/tofu-modules-datadog-sensitive-data-scanner/releases/latest
 [tofu-modules]: https://github.com/codeforamerica/tofu-modules
