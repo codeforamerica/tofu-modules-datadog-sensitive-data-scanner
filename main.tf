@@ -1,6 +1,6 @@
 resource "datadog_sensitive_data_scanner_group" "this" {
-  name         = var.group_name
-  description  = var.group_description
+  name        = var.group_name
+  description = var.group_description
   filter {
     query = var.filter_query
   }
@@ -23,8 +23,8 @@ data "datadog_sensitive_data_scanner_standard_pattern" "patterns" {
 
 resource "datadog_sensitive_data_scanner_rule" "rules" {
   lifecycle {
-    // Use this meta-argument to avoid disabling the group when modifying the 
-    // `included_keyword_configuration` field
+    # Use this meta-argument to avoid disabling the group when modifying the
+    # `included_keyword_configuration` field
     create_before_destroy = true
   }
   for_each = data.datadog_sensitive_data_scanner_standard_pattern.patterns
