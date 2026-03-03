@@ -26,7 +26,7 @@ resource "datadog_sensitive_data_scanner_rule" "rules" {
   for_each = data.datadog_sensitive_data_scanner_standard_pattern.patterns
 
   name                = each.key
-  description         = "Redaction rule for ${each.key}"
+  description         = each.value.description
   group_id            = datadog_sensitive_data_scanner_group.this.id
   standard_pattern_id = each.value.id
   is_enabled          = true
