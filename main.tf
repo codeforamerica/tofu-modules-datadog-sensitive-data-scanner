@@ -30,7 +30,7 @@ resource "datadog_sensitive_data_scanner_rule" "rules" {
   group_id            = datadog_sensitive_data_scanner_group.this.id
   standard_pattern_id = each.value.id
   is_enabled          = true
-  tags                = each.value.tags
+  tags                = toset(concat(each.value.tags, ["sensitive_data:true"]))
 
   text_replacement {
     type               = "replacement_string"
