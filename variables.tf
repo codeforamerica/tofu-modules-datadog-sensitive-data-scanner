@@ -45,6 +45,11 @@ variable "monitor_evaluation_window" {
   type        = string
   description = "The time window for monitor query evaluation. Valid values: 5m, 10m, 15m, 30m, 1h, 2h, 4h, 1d."
   default     = "1d"
+
+  validation {
+    condition     = contains(["5m", "10m", "15m", "30m", "1h", "2h", "4h", "1d"], var.monitor_evaluation_window)
+    error_message = "monitor_evaluation_window must be one of: 5m, 10m, 15m, 30m, 1h, 2h, 4h, 1d."
+  }
 }
 
 variable "monitor_renotify_interval" {
