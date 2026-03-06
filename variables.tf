@@ -1,3 +1,22 @@
+variable "credentials_monitor_excluded_tags" {
+  type        = list(string)
+  description = <<-EOT
+    Tags to exclude from the credentials monitor query. Each entry is negated and
+    appended to the base query. Useful for suppressing noisy but expected findings.
+
+    Examples:
+      ["env:dev"]
+      ["@sensitive_data.matches.rule_name:Bearer Token Scanner", "env:staging"]
+  EOT
+  default     = []
+}
+
+variable "enable_monitors" {
+  type        = bool
+  description = "Whether to create Datadog monitors for Sensitive Data Scanner findings."
+  default     = false
+}
+
 variable "filter_query" {
   type        = string
   description = "The filter query to determine which logs/spans/events are scanned."
@@ -22,34 +41,21 @@ variable "is_enabled" {
   default     = true
 }
 
-variable "product_list" {
-  type        = list(string)
-  description = "List of products to scan (e.g., logs, apm, rum)."
-  default     = ["logs", "apm"]
-}
-
-variable "product_samplings" {
-  type        = map(number)
-  description = "Map of product to sampling rate (0 to 100). Defaults to 100 for each product in product_list if not specified."
-  default     = {}
-}
-
-variable "redaction_replacement_string" {
+variable "monitor_evaluation_window" {
   type        = string
-  description = "The string to use for redaction if type is replacement_string."
-  default     = "[REDACTED]"
+  description = "The time window for monitor query evaluation. Valid values: 5m, 10m, 15m, 30m, 1h, 2h, 4h, 1d."
+  default     = "1d"
 }
 
-variable "credentials_monitor_excluded_tags" {
-  type        = list(string)
-  description = <<-EOT
-    Tags to exclude from the credentials monitor query. Each entry is negated and
-    appended to the base query. Useful for suppressing noisy but expected findings.
+variable "monitor_renotify_interval" {
+  type        = number
+  description = "Minutes between re-notifications when a monitor stays in alert state. Defaults to 1440 (once per day). Set to 0 to disable re-notification."
+  default     = 1440
+}
 
-    Examples:
-      ["env:dev"]
-      ["@sensitive_data.matches.rule_name:Bearer Token Scanner", "env:staging"]
-  EOT
+variable "notification_targets" {
+  type        = list(string)
+  description = "List of notification targets for monitors (e.g., \"@slack-channel\", \"@pagerduty-service\")."
   default     = []
 }
 
@@ -66,28 +72,22 @@ variable "pii_monitor_excluded_tags" {
   default     = []
 }
 
-variable "monitor_evaluation_window" {
-  type        = string
-  description = "The time window for monitor query evaluation. Valid values: 5m, 10m, 15m, 30m, 1h, 2h, 4h, 1d."
-  default     = "1d"
-}
-
-variable "monitor_renotify_interval" {
-  type        = number
-  description = "Minutes between re-notifications when a monitor stays in alert state. Defaults to 1440 (once per day). Set to 0 to disable re-notification."
-  default     = 1440
-}
-
-variable "enable_monitors" {
-  type        = bool
-  description = "Whether to create Datadog monitors for Sensitive Data Scanner findings."
-  default     = false
-}
-
-variable "notification_targets" {
+variable "product_list" {
   type        = list(string)
-  description = "List of notification targets for monitors (e.g., \"@slack-channel\", \"@pagerduty-service\")."
-  default     = []
+  description = "List of products to scan (e.g., logs, apm, rum)."
+  default     = ["logs", "apm"]
+}
+
+variable "product_samplings" {
+  type        = map(number)
+  description = "Map of product to sampling rate (0 to 100). Defaults to 100 for each product in product_list if not specified."
+  default     = {}
+}
+
+variable "redaction_replacement_string" {
+  type        = string
+  description = "The string to use for redaction if type is replacement_string."
+  default     = "[REDACTED]"
 }
 
 variable "standard_patterns" {
