@@ -34,23 +34,31 @@ tofu init -upgrade
 
 ## Inputs
 
-| Name                           | Description                                                                    | Type           | Default                    | Required |
-|--------------------------------|--------------------------------------------------------------------------------|----------------|----------------------------|----------|
-| `group_name`                   | The name of the Sensitive Data Scanner group.                                  | `string`       | `"Default Scanning Group"` | no       |
-| `group_description`            | The description of the Sensitive Data Scanner group.                           | `string`       | `"Managed by OpenTofu"`    | no       |
-| `filter_query`                 | The filter query to determine which logs/spans/events are scanned.             | `string`       | `"*"`                      | no       |
-| `product_list`                 | List of products to scan (e.g., logs, apm, rum).                               | `list(string)` | `["logs", "apm"]`          | no       |
-| `product_samplings`            | Map of product to sampling rate (0 to 100).                                    | `map(number)`  | `{}`                       | no       |
-| `is_enabled`                   | Whether the scanning group is enabled.                                         | `bool`         | `true`                     | no       |
-| `standard_patterns`            | List of standard Scanning Rules Library rules to enable.                       | `list(string)` | `[...]`                    | no       |
-| `redaction_replacement_string` | The string to use for redaction if type is replacement_string.                 | `string`       | `"[REDACTED]"`             | no       |
+| Name                                  | Description                                                                                                   | Type           | Default                    | Required |
+|---------------------------------------|---------------------------------------------------------------------------------------------------------------|----------------|----------------------------|----------|
+| `credentials_monitor_excluded_tags`   | Tags to exclude from the credentials monitor query (e.g., `["env:dev"]`). Each entry is negated in the query. | `list(string)` | `[]`                       | no       |
+| `enable_monitors`                     | Whether to create Datadog monitors for Sensitive Data Scanner findings.                                       | `bool`         | `false`                    | no       |
+| `filter_query`                        | The filter query to determine which logs/spans/events are scanned.                                            | `string`       | `"*"`                      | no       |
+| `group_description`                   | The description of the Sensitive Data Scanner group.                                                          | `string`       | `"Managed by OpenTofu"`    | no       |
+| `group_name`                          | The name of the Sensitive Data Scanner group.                                                                 | `string`       | `"Default Scanning Group"` | no       |
+| `is_enabled`                          | Whether the scanning group is enabled.                                                                        | `bool`         | `true`                     | no       |
+| `monitor_evaluation_window`           | Time window for monitor query evaluation. Valid values: `5m`, `10m`, `15m`, `30m`, `1h`, `2h`, `4h`, `1d`.    | `string`       | `"1d"`                     | no       |
+| `monitor_renotify_interval`           | Minutes between re-notifications when a monitor stays in alert state. Set to `0` to disable re-notification.  | `number`       | `1440`                     | no       |
+| `notification_targets`                | List of notification targets for monitors (e.g., `"@slack-channel"`, `"@pagerduty-service"`).                 | `list(string)` | `[]`                       | no       |
+| `pii_monitor_excluded_tags`           | Tags to exclude from the PII monitor query (e.g., `["env:dev"]`). Each entry is negated in the query.         | `list(string)` | `[]`                       | no       |
+| `product_list`                        | List of products to scan (e.g., logs, apm, rum).                                                              | `list(string)` | `["logs", "apm"]`          | no       |
+| `product_samplings`                   | Map of product to sampling rate (0 to 100).                                                                   | `map(number)`  | `{}`                       | no       |
+| `redaction_replacement_string`        | The string to use for redaction if type is replacement_string.                                                | `string`       | `"[REDACTED]"`             | no       |
+| `standard_patterns`                   | List of standard Scanning Rules Library rules to enable.                                                      | `list(string)` | `[...]`                    | no       |
 
 ## Outputs
 
-| Name       | Description                                    | Type          |
-|------------|------------------------------------------------|---------------|
-| `group_id` | The ID of the Sensitive Data Scanner group.    | `string`      |
-| `rule_ids` | A map of standard pattern names to rule IDs.   | `map(string)` |
+| Name                  | Description                                                                             | Type          |
+|-----------------------|-----------------------------------------------------------------------------------------|---------------|
+| `group_id`            | The ID of the Sensitive Data Scanner group.                                             | `string`      |
+| `monitor_critical_id` | The ID of the critical severity Sensitive Data Scanner monitor, or `null` if disabled.  | `string`      |
+| `monitor_high_id`     | The ID of the high severity (PII) Sensitive Data Scanner monitor, or `null` if disabled.| `string`      |
+| `rule_ids`            | A map of standard pattern names to rule IDs.                                            | `map(string)` |
 
 ## Contributing
 
