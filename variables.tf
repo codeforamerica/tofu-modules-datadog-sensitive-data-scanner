@@ -40,6 +40,56 @@ variable "redaction_replacement_string" {
   default     = "[REDACTED]"
 }
 
+variable "credentials_monitor_excluded_tags" {
+  type        = list(string)
+  description = <<-EOT
+    Tags to exclude from the credentials monitor query. Each entry is negated and
+    appended to the base query. Useful for suppressing noisy but expected findings.
+
+    Examples:
+      ["env:dev"]
+      ["@sensitive_data.matches.rule_name:Bearer Token Scanner", "env:staging"]
+  EOT
+  default     = []
+}
+
+variable "pii_monitor_excluded_tags" {
+  type        = list(string)
+  description = <<-EOT
+    Tags to exclude from the PII monitor query. Each entry is negated and
+    appended to the base query.
+
+    Examples:
+      ["env:dev"]
+      ["service:analytics-pipeline"]
+  EOT
+  default     = []
+}
+
+variable "monitor_evaluation_window" {
+  type        = string
+  description = "The time window for monitor query evaluation. Valid values: 5m, 10m, 15m, 30m, 1h, 2h, 4h, 1d."
+  default     = "1d"
+}
+
+variable "monitor_renotify_interval" {
+  type        = number
+  description = "Minutes between re-notifications when a monitor stays in alert state. Defaults to 1440 (once per day). Set to 0 to disable re-notification."
+  default     = 1440
+}
+
+variable "enable_monitors" {
+  type        = bool
+  description = "Whether to create Datadog monitors for Sensitive Data Scanner findings."
+  default     = false
+}
+
+variable "notification_targets" {
+  type        = list(string)
+  description = "List of notification targets for monitors (e.g., \"@slack-channel\", \"@pagerduty-service\")."
+  default     = []
+}
+
 variable "standard_patterns" {
   type        = list(string)
   description = "List of standard Scanning Rules Library rules to enable. See https://app.datadoghq.com/sensitive-data-scanner/configuration/telemetry/library"
