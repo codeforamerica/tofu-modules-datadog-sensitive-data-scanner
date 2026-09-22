@@ -1,6 +1,6 @@
 resource "datadog_sensitive_data_scanner_group" "this" {
-  name        = var.group_name
-  description = var.group_description
+  name         = var.group_name
+  description  = var.group_description
   is_enabled   = var.is_enabled
   product_list = var.product_list
 
@@ -15,11 +15,6 @@ resource "datadog_sensitive_data_scanner_group" "this" {
       rate    = lookup(var.product_samplings, samplings.value, 100)
     }
   }
-}
-
-data "datadog_sensitive_data_scanner_standard_pattern" "patterns" {
-  for_each = toset(var.standard_patterns)
-  filter   = each.value
 }
 
 resource "datadog_sensitive_data_scanner_rule" "rules" {
