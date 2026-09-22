@@ -95,42 +95,55 @@ variable "redaction_replacement_string" {
   default     = "[REDACTED]"
 }
 
+variable "standard_pattern_ids" {
+  type        = map(string)
+  description = <<-EOT
+    Stable Datadog standard pattern IDs, keyed by pattern name. Merged over the
+    module's built-in table, so this can both add patterns the module doesn't
+    know about and correct an ID that has gone stale.
+
+    Preferred over names to avoid ambiguity when a pattern's name is a substring
+    of another's.
+    EOT
+  default     = {}
+}
+
 variable "standard_patterns" {
   type        = list(string)
   description = "List of standard Scanning Rules Library rules to enable. See https://app.datadoghq.com/sensitive-data-scanner/configuration/telemetry/library"
-  default     = [
-      "Standard Email Address Scanner",
-      "US Passport Scanner",
-      "US Social Security Number Scanner",
-      "US Vehicle Identification Number Scanner",
-      "ABA Routing Transit Number Scanner",
-      "Standard IBAN Code Scanner",
-      "AWS Access Key ID Scanner",
-      "AWS Secret Access Key Scanner",
-      "Bearer Token Scanner",
-      "Datadog API Key Scanner",
-      "Doppler Access Token Scanner",
-      "Github Access Token Scanner",
-      "Github Refresh Token Scanner",
-      "Google Client Secret Scanner",
-      "Heroku API Key Scanner",
-      "Intercom Access Token Scanner",
-      "JIRA API Token Scanner",
-      "Mailgun API Key Scanner",
-      "Mailgun API Key v2 Scanner",
-      "Okta API Token Scanner",
-      "PagerDuty API Token Scanner",
-      "PGP Private Key Scanner",
-      "RSA Private Key Scanner",
-      "SendGrid API Key Scanner",
-      "Slack Access Token Scanner",
-      "Slack Webhook Secret Scanner",
-      "SSH Key Scanner",
-      "Stripe Secret API Key Scanner",
-      "Twilio Access Token Scanner",
-      "Twilio API Key Scanner",
-      "Twilio API Key Scanner",
-      "Twilio API Secret Scanner",
-      "Twilio Auth Token Scanner"
+  default = [
+    "Standard Email Address Scanner",
+    "US Passport Scanner",
+    "US Social Security Number Scanner",
+    "US Vehicle Identification Number Scanner",
+    "ABA Routing Transit Number Scanner",
+    "Standard IBAN Code Scanner",
+    "AWS Access Key ID Scanner",
+    "AWS Secret Access Key Scanner",
+    "Bearer Token Scanner",
+    "Datadog API Key Scanner",
+    "Doppler Access Token Scanner",
+    "Github Access Token Scanner",
+    "Github Refresh Token Scanner",
+    "Google Client Secret Scanner",
+    "Heroku API Key Scanner",
+    "Intercom Access Token Scanner",
+    "JIRA API Token Scanner",
+    "Mailgun API Key Scanner",
+    "Mailgun API Key v2 Scanner",
+    "Okta API Token Scanner",
+    "PagerDuty API Token Scanner",
+    "PGP Private Key Scanner",
+    "RSA Private Key Scanner",
+    "SendGrid API Key Scanner",
+    "Slack Access Token Scanner",
+    "Slack Webhook Secret Scanner",
+    "SSH Key Scanner",
+    "Stripe Secret API Key Scanner",
+    "Twilio Access Token Scanner",
+    "Twilio API Key Scanner",
+    "Twilio API Key Scanner",
+    "Twilio API Secret Scanner",
+    "Twilio Auth Token Scanner"
   ]
 }
